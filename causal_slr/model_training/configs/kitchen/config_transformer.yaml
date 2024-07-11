@@ -1,0 +1,49 @@
+working_dir: "experiments/model_learning"
+learn_mdp: True
+skill_learn: False # used by main.py
+seed: 10
+dont_save: False
+sweep_name: kitchen_transformer
+world_model:
+  path_data: kitchen/all_datasets_and_random.npy
+  validate_only: false
+
+  train_params: # parameters for main fct in train.py
+    total_grad_steps: 100000
+    log_interval: 1000 # global steps
+    init_grad_clip: 0.001
+    init_grad_clip_step: 100     # clip gradients in initial N steps to avoid NaNs
+    split_ratios: [0.9, 0.1]
+    batch_size: 500
+    lr: 0.001
+    gradient_clip: 5.
+    optimizer: "adam"
+    adam_beta: 0.9
+    val_interval: 1000 # global steps
+    normalize_data: False
+    loss_fn: 
+      name: "mse_loss"
+
+  model_params:
+    model_type: "Transformer"
+    use_state_diff: true
+    bn_first: false
+    n_heads: 2
+    n_layers: 5
+    fc_dim: 128
+    embedding_dim: 128
+    dropout: 0.
+
+
+  # data_config:
+  #   dataset_spec:
+  #     action_dim: 9
+  #     state_dim: 30
+
+  env_config:
+    name: kitchen-mixed-v0
+    params:
+      reward_norm: 1.
+      remove_goal: True
+    max_episode_len: 280
+    n_objects: 8

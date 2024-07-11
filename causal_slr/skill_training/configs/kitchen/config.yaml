@@ -1,0 +1,123 @@
+working_dir: "experiments/skill_learning"
+seed: 7
+sweep_name: all_tasks
+dont_save: False
+preset_mdp_config_path: /path/to/model # path to trained world model
+learn_mdp: False
+evaluate: False
+just_compute_cai: False
+skill_learn: True
+skill_general:
+  total_grad_steps: 2000000
+  batch_size: 500 #if made bigger,there is not enough sequences for validation
+  optimizer: adam #supported: 'adam', 'radam', 'rmsprop', 'sgd'
+  lr: 0.0005
+  gradient_clip: null
+  init_grad_clip: 0.001
+  init_grad_clip_step: 100 #clip gradients in initial N steps to avoid NaNs
+  adam_beta: 0.9 #beta1 param in Adam
+  with_cai: True
+
+  log_interval: 500 # steps
+  val_interval: 1000 #steps
+  n_episodes_inference_val: 18 #number of episodes used for validation
+
+  strict_weight_loading: True
+  detect_anomaly: False
+
+skill_model_config:
+  model_class: SkillMdl
+  len_skill: 10
+
+  # VAE Network size
+  nz_vae: 10 #dimensionality of vae latent space (z)
+  weight_init: xavier_normal_
+  bias_init: zeros_
+
+  # VAE encoder (posterior): LSTM
+  lstm_hid_size: 128 #hidden size of lstm
+  n_lstm_layers: 1 #number of LSTM layers
+
+  # VAE decoder: MLP
+  cond_decode: True #condition decoder on state
+  goal_cond: True
+  ndim_mid_dec: 128 #dimensionality of internal feature spaces for decoder (from z to output)
+  n_decoder_layers: 3 #number of layers in decoder
+
+  # Learned prior
+  n_prior_nets: 1 # number of prior networks in ensemble
+  n_prior_net_layers: 3 # number of layers of the learned prior MLP
+  ndim_mid_prior: 128 # dimensionality of internal feature spaces for prior net
+  learned_prior_type: gauss # distribution type for learned prior, ['gauss', 'gmm', 'flow']
+
+  # Loss weights
+  reconstruction_mse_weight: 2. # weight of MSE reconstruction loss
+  kl_div_weight_lp: 1.0 #weight of KL divergence loss between posterior q and learned prior
+  kl_balancing_mix: 0.8 #balances bidirectional KL, weight w for KL prior towards posterior and 1-w for KL posterior to prior
+  target_kl: null # if not None, adds automatic beta-tuning to reach target KL divergence
+  full_decode: True
+  state_action_decode: False
+  mpc_approach: False
+# Dataset
+data_config:
+  dataset_spec:
+    scorer_cls: cai # coda / mask
+    action_dim: 9
+    state_dim: 30
+    dataset_name: "kitchen/all_datasets.npy"
+    goal_idxs:
+      [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+      ]
+    goal_dim: 21
+    # min_skill_len: 1
+    remove_goal: True
+    train_split: 0.9
+    val_split: 0.1
+
+  data_loader:
+    smooth_cai_kernel: 10
+    pad_n_steps: False
+    zero_padding: False
+    p_geom: 0.05
+    augment_counterfactual: True
+    prob_counterfactual: .8
+    cai_computer_params:
+      reuse_action_samples: True
+      n_mixture_samples: 64
+      n_expectation_samples: 64
+    recompute_cai: True
+    thr_cai: 0.2 #0.3 for coda and mask
+
+# Environment
+env_config:
+  name: kitchen-mixed-v0
+  params:
+    reward_norm: 1.
+  max_episode_len: 280
+  n_objects: 8
+  tasks: ['microwave', 'kettle', 'light switch', 'slide cabinet', 'bottom burner', 'hinge cabinet']
+  random_init_objs: True
+
+log_videos: True # whether to log videos during logging
+log_video_caption: True # whether to add captions to video

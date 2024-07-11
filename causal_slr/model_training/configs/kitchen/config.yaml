@@ -1,0 +1,55 @@
+working_dir: "experiments/model_learning"
+learn_mdp: True
+skill_learn: False # used by main.py
+seed: 10
+dont_save: False
+sweep_name: kitchen_mlp
+world_model:
+  path_data: kitchen/all_datasets_and_random.npy
+  validate_only: false
+
+  train_params: # parameters for main fct in train.py
+    total_grad_steps: 100000
+    log_interval: 1000 # global steps
+    init_grad_clip: 0.001
+    init_grad_clip_step: 100     # clip gradients in initial N steps to avoid NaNs
+    split_ratios: [0.9, 0.1]
+    batch_size: 500
+    lr: 8.e-4
+    gradient_clip: 10
+    optimizer: "adam"
+    adam_beta: 0.9
+    val_interval: 1000 # global steps
+    normalize_data: False
+    loss_fn: 
+      name: "nll_loss"
+
+  model_params:
+    model_type: "FactorizedMLP"
+    use_state_diff: False
+    outp_layer: "GaussianLikelihoodHead"
+    outp_layer_params:
+        min_var: 1.e-8
+        max_var: 200
+        use_spectral_norm_var: True #apply spectral normalization to the variance output layer (not to the mean output layer)
+
+    
+    hidden_dims: [256, 256, 256, 256, 256]
+    weight_init: "orthogonal_"
+    bias_init: "zeros_"
+    use_spectral_norm: true
+    bn_first: true
+  
+  # might not be needed
+  data_config:
+    dataset_spec:
+      action_dim: 9
+      state_dim: 30
+
+  env_config:
+    name: kitchen-mixed-v0
+    params:
+      reward_norm: 1.
+      remove_goal: true
+    max_episode_len: 280
+    n_objects: 8

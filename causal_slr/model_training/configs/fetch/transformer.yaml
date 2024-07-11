@@ -1,0 +1,46 @@
+working_dir: "experiments/model_learning"
+learn_mdp: True
+skill_learn: False # used by main.py
+seed: 7
+sweep_name: fetchpush_transformer
+dont_save: False
+resume: False
+train: True
+evaluate: False
+
+world_model:
+  validate_only: false
+  path_data: ''
+
+  train_params: # parameters for main fct in train.py
+    total_grad_steps: 100000
+    log_interval: 1000 # global steps
+    split_ratios: [0.95, 0.05]
+    batch_size: 500
+    lr: 0.001
+    gradient_clip: 5.
+    optimizer: "adam"
+    adam_beta: 0.9
+    val_interval: 1000 # global steps
+    normalize_data: False
+    loss_fn: 
+      name: "mse_loss"
+
+  data_params:
+    expert_percent: 0.3
+    random_percent: 0.7
+    shrink_dataset: 0.5
+
+
+  model_params:
+    model_type: "Transformer"
+    use_state_diff: False
+    bn_first: true
+    n_heads: 1
+    n_layers: 3
+    fc_dim: 128
+    embedding_dim: 128
+    dropout: 0.1
+
+  env_config:
+    name: DisentangledFetchPush-2B-v0

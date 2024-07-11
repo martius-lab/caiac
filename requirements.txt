@@ -1,0 +1,25 @@
+# core
+numpy==1.23.1
+matplotlib
+pillow
+h5py==2.10.0
+scikit-image
+funcsigs
+opencv-python
+moviepy
+torchvision
+torch==2.0.1
+gym==0.15.4
+pandas
+protobuf==3.20.*
+scikit-learn
+tueplots
+
+# RL
+wandb
+#mpi4py #install via conda?
+mujoco_py==2.1.2.14
+# D4RL
+git+https://github.com/Farama-Foundation/d4rl@master#egg=d4rl
+
+

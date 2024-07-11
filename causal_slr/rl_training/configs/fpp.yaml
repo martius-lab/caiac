@@ -1,0 +1,48 @@
+env: UnstructuredDisentangledFpp_4Blocks-v1
+train_rl: True
+dont_save: False
+plot_cai: False
+n_epochs: 300
+n_cycles: 20 #num_cycles x n_batches = grad steps per epoch. Every cycle we do a soft update of the target network. 
+n_batches: 20 #grad steps
+n_test_rollouts: 20 # num val episodes
+
+working_dir: experiments/rl_learning/
+cuda: false
+seed: 0
+
+buffer_size: 20000000
+expert_percent: 1.
+random_percent: 1.
+shrink_dataset: 1. # percentage of data to be used
+replay_strategy: future
+relabel: true
+relabel_goal_coda: false
+relabel_goal_ours: true
+relabel_percent: 0.5
+reward_type: binary
+batch_size: 512
+clip_obs: 200
+clip_range: 5
+clip_return: 50
+
+method: TD3_BC
+gamma: 0.97
+polyak: 0.95
+lr_actor: 0.001
+lr_critic: 0.001
+action_l2: 0
+units: 256
+target_noise: 0.2
+noise_clip: 0.5
+policy_delay: 2
+alpha_bc: 2.5
+cai_computer_params:
+  reuse_action_samples: True
+  n_mixture_samples: 64
+  n_expectation_samples: 64
+scorer_cls: cai
+smooth_cai_kernel: 5
+thr_cai: 2. #0.15 for coda, 0.2 for mask
+preset_mdp_config_path: /path/to/model # path to model
+ratio_cf: 0.9

@@ -1,0 +1,49 @@
+env: DisentangledFetchPush-2B-v0
+train_rl: True
+dont_save: False
+plot_cai: False
+n_epochs: 3000
+n_cycles: 20 #num_cycles x n_batches = grad steps per epoch. Every cycle we do a soft update of the target network. 
+n_batches: 20 #grad steps
+n_test_rollouts: 10 # num val episodes
+
+working_dir: experiments/rl_learning/test
+cuda: false
+seed: 0
+
+buffer_size: 20000000
+expert_percent: 0.3
+random_percent: 0.7
+shrink_dataset: .5 # percentage of data to be used
+replay_strategy: future
+relabel: true
+relabel_goal_coda: true
+relabel_goal_ours: false
+relabel_percent: 0.5
+reward_type: binary
+batch_size: 512
+clip_obs: 200
+clip_range: 5
+clip_return: 50
+
+method: TD3
+gamma: 0.97
+polyak: 0.95
+lr_actor: 0.001
+lr_critic: 0.001
+action_l2: 0
+random_eps: 0.3
+units: 256
+target_noise: 0.2
+noise_clip: 0.5
+policy_delay: 2
+
+cai_computer_params:
+  reuse_action_samples: True
+  n_mixture_samples: 64
+  n_expectation_samples: 64
+scorer_cls: cai #cai/coda
+smooth_cai_kernel: 3
+thr_cai: 0.05 #0.2 for coda and mask
+preset_mdp_config_path: /path/to/model # path to model
+ratio_cf: 0.5
