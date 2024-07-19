@@ -1,7 +1,8 @@
 # CAIAC (Causal Action Influence Aware Counterfactual Data Augmentation)
 
 
-Code for the paper "Causal Action Influence Aware Counterfactual Data Augmentation", accepted to ICML 2024.
+Code for the paper "[Causal Action Influence Aware Counterfactual Data Augmentation](https://arxiv.org/pdf/2405.18917)", accepted to ICML 2024.
+
 ## Installation
 
 CAIAC can be installed by unzipping the code file, accessing the folder and doing the following (I recommend creating a separate virtual environment for it).
@@ -166,3 +167,14 @@ For Franka-Kitchen experiments:
 * `causal_slr/skill_training/configs/kitchen/config.yaml` (for all tasks experiment) (CoDA and CoDA-action) changing `scorer_cls` to `coda` or `mask` respectively.
 
 
+# Citation
+If you use our work or some of our ideas, please consider citing us :)
+
+```
+@article{urpi2024causal,
+  title={Causal Action Influence Aware Counterfactual Data Augmentation},
+  author={Urp{\'\i}, N{\'u}ria Armengol and Bagatella, Marco and Vlastelica, Marin and Martius, Georg},
+  journal={arXiv preprint arXiv:2405.18917},
+  year={2024}
+}
+```
